@@ -5,11 +5,18 @@ const pool = require('./config/db');
 
 const app = express();
 
-// Middleware
+// Updated CORS configuration
 app.use(cors({
-    origin: '*', // For testing, we'll allow all origins temporarily
-    credentials: true
+    origin: [
+        'http://localhost:3000',
+        'https://train-ticket-booking.vercel.app',
+        // Add any other frontend URLs you'll use
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 app.use(express.json());
 
 // Test database connection
