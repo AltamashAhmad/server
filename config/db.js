@@ -8,7 +8,13 @@ const pool = new Pool({
   port: process.env.DB_PORT,
   database: process.env.DB_NAME,
   ssl: {
-    rejectUnauthorized: false
+    rejectUnauthorized: false,
+    sslmode: 'require'
+  },
+  dialectOptions: {
+    ssl: {
+      require: true
+    }
   }
 });
 
@@ -18,6 +24,7 @@ pool.connect((err, client, release) => {
         return console.error('Error acquiring client', err.stack);
     }
     console.log('Database connected successfully');
+    if (release) release();
 });
 
 module.exports = pool; 
