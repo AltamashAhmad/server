@@ -65,6 +65,27 @@ app.get('/test-users', async (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/booking', require('./routes/booking'));
 
+// Initialize database tables
+const initDatabase = async () => {
+    try {
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS users (
+                user_id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) UNIQUE NOT NULL,
+                password VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+            );
+        `);
+        console.log('Users table initialized');
+    } catch (error) {
+        console.error('Database initialization error:', error);
+    }
+};
+
+// Initialize database on server start
+initDatabase();
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
