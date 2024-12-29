@@ -9,4 +9,13 @@ const pool = new Pool({
     }
 });
 
+// Test database connection
+pool.connect((err, client, done) => {
+    if (err) {
+        console.error('Database connection error:', err.stack);
+    } else {
+        console.log('Database connected successfully');
+    }
+});
+
 module.exports = pool; 

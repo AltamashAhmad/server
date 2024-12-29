@@ -9,6 +9,13 @@ router.post('/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
+        // Validation
+        if (!email || !password || !name) {
+            return res.status(400).json({ 
+                error: 'Please provide all required fields' 
+            });
+        }
+
         // Check if user exists
         const userExists = await pool.query(
             'SELECT * FROM users WHERE email = $1',
@@ -38,8 +45,11 @@ router.post('/register', async (req, res) => {
 
         res.json({ token });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error' });
+        console.error('Registration error:', error);
+        res.status(500).json({ 
+            error: 'Server error during registration',
+            details: error.message 
+        });
     }
 });
 
