@@ -23,9 +23,16 @@ app.use(express.json());
 // Test database connection
 pool.connect((err, client, release) => {
     if (err) {
-        console.error('Error connecting to database:', err.stack);
+        console.error('Error acquiring client', err.stack);
     } else {
-        console.log('Connected to database successfully');
+        client.query('SELECT NOW()', (err, result) => {
+            release();
+            if (err) {
+                console.error('Error executing query', err.stack);
+            } else {
+                console.log('Database connected:', result.rows[0]);
+            }
+        });
     }
 });
 
