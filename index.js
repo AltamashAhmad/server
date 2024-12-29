@@ -9,7 +9,9 @@ const app = express();
 app.use(cors({
     origin: [
         'http://localhost:3000',
-        'https://train-booking-lyart.vercel.app'
+        'https://train-booking-lyart.vercel.app',
+        'https://train-booking-git-main-altamashahmads-projects.vercel.app',
+        'https://train-booking-5vyyh3sq9-altamashahmads-projects.vercel.app'
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
