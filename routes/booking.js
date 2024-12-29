@@ -47,4 +47,38 @@ const initializeSeats = async () => {
 // Initialize seats when module loads
 initializeSeats();
 
+// Book seats
+router.post('/book', async (req, res) => {
+    try {
+        const { seatIds } = req.body;
+        
+        // Start transaction
+        await pool.query('BEGIN');
+
+        // Update seats
+        await pool.query(
+            'UPDATE seats SET is_booked = TRUE WHERE seat_id = ANY($1)',
+            [seatIds]
+        );
+
+        await pool.query('COMMIT');
+        res.json({ message: 'Seats booked successfully' });
+    } catch (error) {
+        await pool.query('ROLLBACK');
+        console.error('Error booking seats:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Reset all seats
+router.post('/reset', async (req, res) => {
+    try {
+        await pool.query('UPDATE seats SET is_booked = FALSE');
+        res.json({ message: 'All seats reset successfully' });
+    } catch (error) {
+        console.error('Error resetting seats:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 module.exports = router; 
