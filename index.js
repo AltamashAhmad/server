@@ -43,6 +43,24 @@ app.get('/test-db', async (req, res) => {
     }
 });
 
+// Test users table
+app.get('/test-users', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT COUNT(*) FROM users');
+        res.json({
+            status: 'success',
+            message: 'Users table accessible',
+            count: result.rows[0].count
+        });
+    } catch (error) {
+        console.error('Users table test error:', error);
+        res.status(500).json({
+            status: 'error',
+            message: error.message
+        });
+    }
+});
+
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/booking', require('./routes/booking'));
